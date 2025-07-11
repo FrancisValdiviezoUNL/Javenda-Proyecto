@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+
+<ui:composition template="WEB-INF/templates/base-inicio.xhtml">
+    <ui:define name="title-view">
+        Javenda - Inicio
+    </ui:define>
+    <ui:define name="head">
+        <style>
+            .hero {
+                height: 100vh !important;
+            }
+            .hero-main {
+                display: flex;
+                flex: 1;
+                align-items: center;
+                justify-content: space-around;
+                padding: 3% 10%;
+            }
+
+            .hero-text {
+                max-width: 50%;
+                font-family: Arial, sans-serif;
+                color: white;
+                padding: 20px;
+            }
+
+            .hero-text h1 {
+                font-size: 60px;
+                margin-bottom: 10px;
+            }
+
+            .hero-text h2 {
+                font-size: 30px;
+                margin-bottom: 30px;
+            }
+            .custom-button {
+                width: 275px;
+                background: transparent !important;
+                border: 2px solid #ffffff !important;
+                color: #ffffff !important;
+                font-size: 18px;
+                padding: 5px 30px;
+                border-radius: 20px !important;
+                transition: all 0.5s ease;
+            }
+
+            .custom-button:hover {
+                background-color: #ffffff !important;
+                color: #00bcd4 !important;
+                font-weight: bold !important;
+                transform: scale(1.1);
+            }
+
+            .custom-button .ui-button-text {
+                color: inherit !important;
+            }
+
+
+            .hero-image img {
+                max-width: 75%;
+                align-text: center;
+                border-radius: 20px;
+                text-align: center;
+                margin: auto;
+                display: block;
+                box-shadow: 15px 15px 30px rgb(25, 25, 25),
+                -15px -15px 30px rgb(60, 60, 60);;
+            }
+
+            .info-section {
+                padding: 60px 40px;
+                background-color: #fff;
+                color: #333;
+                text-align: center;
+            }
+            .info-equipo {
+                padding: 60px 40px;
+                background: url('images/fondo-oscuro1.jpg') no-repeat center center/cover;
+                height: auto;
+
+            }
+
+
+            .equipo-section {
+                padding: 50px 20px ;
+                text-align: center;
+            }
+
+            .equipo-container {
+                display: flex;
+                justify-content: center;
+                align-items: stretch;
+                flex-wrap: wrap; /* Opcional si quieres responsividad */
+                gap: 20px; /* Este gap previene líneas extrañas */
+            }
+
+            .equipo-card {
+                width: 300px;
+                border-radius: 12px;
+                background-color: rgba(255, 255, 255, 0.8);
+                transition: transform 0.3s ease;
+                background-color: #fff;
+            }
+
+            .equipo-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 6px 12px rgba(255, 255, 255, 0.3);
+            }
+            .equipo-img {
+                width: 200px;
+                height: 200px;
+                object-fit: contain;
+                border-radius: 50%;
+                margin-top: 20px;
+            }
+
+        </style>
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <div class="hero-main">
+                <div class="hero-text">
+                    <h1>JAVENDA</h1>
+                    <h2>Planifica sin límites, gestiona sin complicaciones</h2>
+                    <p:commandButton value="Ingresar"
+                                     icon="pi pi-sign-in"
+                                     rendered="#{!facesContext.externalContext.getSessionMap().containsKey('user')}"
+                                     action="/login.xhtml?faces-redirect=true"
+                                     immediate="true"
+                                     ajax="true"
+                                     styleClass="custom-button"/>
+                </div>
+
+                <div class="hero-image">
+                    <h:graphicImage url="resource/images/javenda-05-02.png" alt="App Preview" />
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+    <ui:define name="seccion">
+        <div class="info-section">
+            <h2>Sobre Nosotros</h2>
+        </div> <!-- Espacio flexible -->
+
+
+        <div class="info-equipo">
+            <h:panelGroup styleClass="equipo-section">
+                <h2 style="color: #fff;">Equipo de Trabajo</h2>
+
+                <div class="equipo-container">
+                    <p:card styleClass="equipo-card">
+                        <h:graphicImage url="images/equipo-trabajo/francis.png" styleClass="equipo-img" />
+
+                        <h4 style="font-size: 25px">Francis Valdiviezo</h4>
+                        <p>Estudiante</p>
+                    </p:card>
+
+                    <p:card styleClass="equipo-card">
+                        <h:graphicImage url="images/equipo-trabajo/odalis.png" styleClass="equipo-img" />
+                        <h4 style="font-size: 25px">Odalis Rosillo</h4>
+                        <p>Estudiante</p>
+                    </p:card>
+
+                    <p:card styleClass="equipo-card">
+                        <h:graphicImage url="images/equipo-trabajo/fernando.png" styleClass="equipo-img" />
+                        <h4 style="font-size: 25px">Fernando Patiño</h4>
+                        <p>Estudiante</p>
+                    </p:card>
+
+                    <p:card styleClass="equipo-card">
+                        <h:graphicImage url="images/equipo-trabajo/richard.png" styleClass="equipo-img" />
+                        <h4 style="font-size: 25px">Richard Chamba</h4>
+                        <p>Estudiante</p>
+                    </p:card>
+                </div>
+            </h:panelGroup>
+        </div>
+        <div class="info-section">
+            <h2>Seccion</h2>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>
+

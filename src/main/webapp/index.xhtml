@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+
+
+<ui:composition template="WEB-INF/templates/base-app.xhtml">
+    <ui:define name="title-view">
+        J-Brew 1.0 - Inicio
+    </ui:define>
+    <ui:define name="head">
+        <style>
+            .custom{
+                background-color: #6CC3F4 !important;
+                transition: all 0.6s !important;
+                font-weight: bold;
+                font-size: 19px !important;
+                margin: 15px !important;
+                cursor: pointer;
+                color: #31373a !important;
+                width: 200px !important;
+            }
+            .custom:hover{
+                background: #DE37B5 !important;
+                color: #ffffff !important;
+
+            }
+        </style>
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <p:growl id="growl" showDetail="true" life="4000" />
+            <div class="card" style="text-align: center">
+                <!-- Contenido Principal -->
+                <p:panel>
+                    <p:graphicImage title="logo" url="images/logo-javenda.webp" style="width: 700px"/>
+                    <h4>Bienvenido a la aplicación que permite la gestión de:</h4>
+                </p:panel>
+            </div>
+            <div class="card" style="text-align: center">
+                <p:splitter style="height: auto" styleClass="mb-5" widgetVar="splitter">
+                    <p:splitterPanel styleClass="flex align-items-center justify-content-center">
+                        <h5>Añadir tareas</h5>
+                        <div class="card" style="text-align: center">
+                            <p:graphicImage title="Añadir tareas" url="images/prescripcion-medica.png" style="width: 155px; align-content: center"/>
+                        </div>
+                        <p:commandButton value="Añadir tareas" styleClass="rounded-button ui-button-success custom" icon="pi pi-plus"
+                                  action="/v1/addtaks.xhtml?faces-redirect=true"/>
+                    </p:splitterPanel>
+                    <p:splitterPanel styleClass="flex align-items-center justify-content-center">
+                        <h5>Mostrar Calendario</h5>
+                        <div class="card" style="text-align: center">
+                            <p:graphicImage title=" Ir Calendario" url="images/calendario.png" style="width: 155px; align-content: center"/>
+                        </div>
+                        <p:commandButton value="Ingresar" styleClass="rounded-button ui-button-success custom" icon="pi pi-calendar"
+                        action="/v1/calendario.xhtml?faces-redirect=true"/>
+                    </p:splitterPanel>
+                    <p:splitterPanel styleClass="flex align-items-center justify-content-center">
+                        <h5>Editar Perfil</h5>
+                        <div class="card" style="text-align: center">
+                            <p:graphicImage title="Perfil" url="images/configuraciones.png" style="width: 155px; align-content: center"/>
+                        </div>
+                        <p:commandButton value="Editar Perfil" styleClass="rounded-button ui-button-success custom" icon="pi pi-user"/>
+                    </p:splitterPanel>
+                </p:splitter>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>
+

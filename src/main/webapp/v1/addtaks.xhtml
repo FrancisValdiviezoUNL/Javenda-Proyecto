@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<ui:composition template="../WEB-INF/templates/base-app.xhtml">
+    <ui:define name="title-view">
+        Javenda - Gestion Tareas
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="searchUserForm">
+            <!--<p:defaultCommand target="userList:search"/>-->
+            <div class="col-12">
+                <div class="card">
+                    <p:growl id="messages" showDetail="true"/>
+                    <h3>Administración de usuarios</h3>
+                    <p:toolbar styleClass="mb-4">
+
+                        <p:toolbarGroup>
+
+                            <p:commandButton id="create" action="../security/userEdit.xhtml"
+                                             icon="pi pi-user-plus"
+                                             styleClass="ui-button-success" style="margin-right: .5rem"
+                                             value="Añadir"/>
+
+                        </p:toolbarGroup>
+
+
+                    </p:toolbar>
+
+                    <p:dataTable id="userlist"
+                                 value="1"
+                                 var="Materia"
+                                 emptyMessage="No existe usuarios"
+                                 paginator="true" rows="15"
+                                 paginatorPosition="bottom" style="text-align: center">
+
+                        <f:facet name="header">
+
+                            <div class="products-table-header">
+                                <span style="font-weight: bold">
+                                    Gestión de Tareas ( 10 encontrados)
+                                </span>
+                                <span class="filter-container ui-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <p:inputText id="name" value=""
+                                                 placeholder="Buscar Tarea"/>
+<!--                                    <p:spacer width="5"/>-->
+                                    <p:commandButton id="search" icon="pi pi-search"
+                                                     styleClass="rounded-button-sucess"
+                                                     update="searchUserForm" action="s"
+                                                     title="Buscar" style="background-color: green"/>
+<!--                                    <p:spacer width="10px"/>-->
+                                    <p:commandButton id="reset" process="@this" action="#{userList.reset}"
+                                                     update="searchUserForm" icon="pi pi-refresh"
+                                                     styleClass="rounded-button-sucess" title="Limpiar" style="background-color: red"/>
+                                </span>
+                            </div>
+                        </f:facet>
+                        <p:column headerText="Id" style="text-align: center">
+                            <h:outputText value="1"/>
+                        </p:column>
+                        <p:column headerText="Titulo" style="text-align: center">
+                            <h:outputText value="Vectores en el espacio"/>
+                        </p:column>
+                        <p:column headerText="Descripcion" style="text-align: center">
+                            <h:outputText value="Hacer los ejercicis 1 y 5"/>
+                        </p:column>
+                        <p:column headerText="Materia" style="text-align: center">
+                            <h:outputText value="Analisis Matematico"/>
+                        </p:column>
+                        <p:column headerText="Editar Tarea" styleClass="action" class="md:col-2" style="text-align: center">
+                            <p:commandButton icon="pi pi-pencil"
+                                             styleClass="edit-button rounded-button ui-button-success" ajax="false"
+                                             title="Editar usuario" style="backgroung-color: green"/>
+                        </p:column>
+
+                    </p:dataTable>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<ui:composition template="WEB-INF/templates/base-app.xhtml">
+
+    <ui:define name="title-view">
+        Javenda - Login
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+
+            <p:growl id="growl" showDetail="true" life="4000" />
+            <div class="card" style="text-align: center">
+                <!-- Contenido Principal -->
+                <p:panel>
+                    <p:graphicImage title="logo" url="images/logo-javenda.webp" style="width: 300px"/>
+                    <h4>Bienvenido a la aplicación que permite la gestión de:</h4>
+                </p:panel>
+            </div>
+            <div class="card" style="text-align: center">
+                <p:splitter style="height: auto" styleClass="mb-5" widgetVar="splitter">
+                    <p:splitterPanel styleClass="flex align-items-center justify-content-center">
+                        <h5>Pedidos de cafetería</h5>
+                        <div class="card" style="text-align: center">
+                            <p:graphicImage title="Añadir tareas" url="images/pedido.png" style="width: 155px; align-content: center"/>
+                        </div>
+                        <p:button value="Ingresar" styleClass="rounded-button ui-button-success"/>
+                    </p:splitterPanel>
+                    <p:splitterPanel styleClass="flex align-items-center justify-content-center">
+                        <h5>Reportes de venta</h5>
+                        <div class="card" style="text-align: center">
+                            <p:graphicImage title="Reportes" url="images/reporte.png" style="width: 155px; align-content: center"/>
+                        </div>
+                        <p:button value="Ingresar" style="margin: 20px; background-color: #764c43"/>
+                    </p:splitterPanel>
+                    <p:splitterPanel styleClass="flex align-items-center justify-content-center">
+                        <h5>Gestión de productos</h5>
+                        <div class="card" style="text-align: center">
+                            <p:graphicImage title="Productos" url="images/productos.png" style="width: 155px; align-content: center"/>
+                        </div>
+                        <p:button value="Ingresar" style="margin: 20px; background-color: #764c43"/>
+                    </p:splitterPanel>
+                </p:splitter>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

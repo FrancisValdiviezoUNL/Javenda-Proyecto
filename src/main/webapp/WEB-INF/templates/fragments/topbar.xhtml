@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+<style>
+   .ui-sticky {
+      top: 70px !important;
+   }
+
+   @media (max-width: 960px) {
+      .ui-sticky {
+         top: 110px !important;
+      }
+   }
+   .panel-header {
+      background-color: #764c43;
+   }
+</style>
+
+<ui:composition>
+
+      <h:form >
+         <div style="background: url('../../../images/fondo-oscuro1.jpg') no-repeat center center/cover">
+         <p:growl id="messages"/>
+
+         <p:menubar hideDelay="1000"  style="background: url('../../../images/fondo-oscuro1.jpg') no-repeat center center/cover">
+            <f:facet name="start">
+               <p:graphicImage url="../../images/logo-javenda.webp" style="width: 150px"/>
+            </f:facet>
+
+
+            <f:facet name="end">
+
+               <p:commandButton value="Login"
+                                rendered="#{!facesContext.externalContext.getSessionMap().containsKey('user')}"
+                                action="/login.xhtml?faces-redirect=true"
+                                styleClass="rounded-button"/>
+
+
+               <p:menuButton value="#{userSession.user.person.firstName}" icon="pi pi-user" iconPos="right"
+                             rendered="#{authenticationBean.verifyUserSession()}"
+                             styleClass="rounded-button ui-button-secondary ">
+                  <p:menuitem value="Pagina de Inicio" url="/index.xhtml?faces-redirect=true" icon="pi pi-home"/>
+                  <p:menuitem value="Editar perfil" icon="pi pi-save"/>
+                  <p:menuitem value="menu" icon="pi pi-save" action="v1//calendario.xhtml?faces-redirect=true"/>
+                  <p:menuitem value="Cerrar Sesion" action="#{authenticationBean.logout}" ajax="false" icon="pi pi-times"/>
+
+               </p:menuButton>
+
+               <p:commandButton icon="pi pi-home"
+                                styleClass="rounded-button ui-button-warning ui-button-outlined"
+                                action="/index.xhtml?faces-redirect=true"
+                                immediate="true"
+                                style="margin-left:20px"/>
+            </f:facet>
+         </p:menubar>
+      </div>
+      </h:form>
+</ui:composition>
+
+</html>
