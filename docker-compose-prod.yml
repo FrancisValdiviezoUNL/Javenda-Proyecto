@@ -1,0 +1,94 @@
+
+services:
+
+  # Base de datos MySQL
+  javenda-mysql-db:
+    image: mysql:${MYSQL_VERSION}
+    restart: unless-stopped
+    container_name: javenda-mysql-db-container
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_MYSQL_PORT_PUBLIC}:3306
+    volumes:
+      - javenda-mysql-data:/var/lib/mysql
+      #- ./init_db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      javenda-network:
+        ipv4_address: 173.21.0.250
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u$${MYSQL_USER}", "-p$${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5  # Número de intentos antes de marcar como no saludable
+      start_period: 30s #Espera inicial antes de comenzar a comprobar(Dar tiempo a MySQL inicie)
+
+  javenda-web:
+    container_name: javenda-web-container
+    build:
+      context: .
+      args:
+        # Parámetros para el Dockerfile definido en las variables del archivo .env o sistema para copiar el archivo durante el build.
+        # Se usa solo durante la creación de la imagen. No afecta al contenedor en ejecución.
+        # Copia el driver JDBC a /config/ dentro de la imagen
+        - ENV_DRIVER_JDBC_DIR=${DRIVER_JDBC_DIR}
+    image: javenda-web:latest
+    environment:
+      # Ejecución del contenedor (environment):
+      # Open Liberty usa DRIVER_JDBC_DIR=/config/ para ubicar el driver.
+      - DRIVER_JDBC_DIR=/config/
+      - DB_SERVER_NAME=${DB_SERVER_NAME}
+      - DB_PORT_NUMBER=${DB_PORT_NUMBER}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "9080:9080"
+      - "9443:9443"
+    depends_on:
+      - javenda-mysql-db
+    deploy:
+      resources:
+        limits:
+          #cpus: '0.50'
+          memory: 1024M
+        reservations:
+          #cpus: '0.25'
+          memory: 512M
+    networks:
+      javenda-network:
+        #ipv4_address: 172.21.0.2
+
+  mysql-adminer-bd:
+      image: adminer
+      container_name: mysql-adminer-bd-container
+      restart: unless-stopped
+      ports:
+        - 8081:8080
+      depends_on:
+        - javenda-mysql-db
+      networks:
+        javenda-network:
+          ipv4_address: 173.21.0.253
+
+networks:
+  javenda-network:
+    driver: bridge
+    #driver_opts:
+    #    parent: eth0
+    ipam:
+      driver: default
+      config:
+        - subnet: 173.21.0.0/24
+
+volumes:
+  javenda-mysql-data:
+    name: javenda-mysql-data-local
+    driver: local
+    driver_opts:
+      type: none
+      device: ${LOCAL_MYSQL_DATA_DIR_BD}
+      o: bind

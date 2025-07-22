@@ -1,6 +1,8 @@
 package edu.unl.cc.jbrew.domain.security;
 
 import edu.unl.cc.jbrew.domain.common.Person;
+import edu.unl.cc.jbrew.domain.common.funtion.Task;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -9,19 +11,36 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
+@NamedQueries({
+        @NamedQuery(name = "User.findLikeName", query = "select o from User o where o.name like :name"),
+        @NamedQuery(name = "User.findById", query = "select o from User o where o.id = :id ")
+})
 public class User implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     @NotNull @NotEmpty
     private String name;
+
     @NotNull @NotEmpty
     private String password;
 
     // Relations
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Person person;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "USER_ROLE",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Task> tasks = new HashSet<>();
 
 
     public User() {

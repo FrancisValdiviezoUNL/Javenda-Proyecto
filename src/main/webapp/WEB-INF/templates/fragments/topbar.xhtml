@@ -40,9 +40,9 @@
                                 styleClass="rounded-button"/>
 
 
-               <p:menuButton value="#{userSession.user.person.firstName}" icon="pi pi-user" iconPos="right"
+               <p:menuButton value="#{userSession.user.name}" icon="pi pi-user" iconPos="right"
                              rendered="#{authenticationBean.verifyUserSession()}"
-                             styleClass="rounded-button ui-button-secondary ">
+                             styleClass="rounded-button ui-button-secondary">
                   <p:menuitem value="Pagina de Inicio" url="/index.xhtml?faces-redirect=true" icon="pi pi-home"/>
                   <p:menuitem value="Editar perfil" icon="pi pi-save"/>
                   <p:menuitem value="menu" icon="pi pi-save" action="v1//calendario.xhtml?faces-redirect=true"/>
@@ -52,7 +52,7 @@
 
                <p:commandButton icon="pi pi-home"
                                 styleClass="rounded-button ui-button-warning ui-button-outlined"
-                                action="/index.xhtml?faces-redirect=true"
+                                action="/dashboard.xhtml?faces-redirect=true"
                                 immediate="true"
                                 style="margin-left:20px"/>
             </f:facet>

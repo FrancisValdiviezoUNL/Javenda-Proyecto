@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        background-color: #0b0b0b;
+        color: white;
+    }
+
+</style>
+
+<ui:composition>
+
+    <h:form>
+            <div class="navbar">
+                <h:graphicImage url="../../../images/logo-javenda.webp" alt="Logo" />
+                <div class="navbar-buttons">
+                    <p:commandButton value="Ingresar"
+                                     icon="pi pi-sign-in"
+                                     rendered="#{!facesContext.externalContext.getSessionMap().containsKey('user')}"
+                                     action="/login.xhtml?faces-redirect=true"
+                                     immediate="true"
+                                     ajax="true"
+                                     styleClass="custom-button-navbar"/>
+                    <p:commandButton icon="pi pi-home"
+                                     title="Inicio"
+                                     action="/index.xhtml?faces-redirect=true"
+                                     styleClass="icon-button"
+                                     immediate="true"
+                                     ajax="true"
+                    />
+
+                </div>
+            </div>
+
+    </h:form>
+</ui:composition>
+
+</html>

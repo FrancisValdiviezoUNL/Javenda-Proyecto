@@ -1,5 +1,7 @@
 package edu.unl.cc.jbrew.domain.common;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -7,8 +9,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Entity
 public class Person implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull @NotEmpty
@@ -16,11 +21,19 @@ public class Person implements Serializable {
 
     @NotNull @NotEmpty
     private String lastName;
+
+    @NotNull
     private LocalDate birthDate;
+
+    @NotNull
+    @Email(message = "Formato de email incorrecto")
     private String email;
+
+    @Enumerated(EnumType.STRING)
     private GenderType gender;
 
     public Person() {
+        gender = GenderType.MALE;
         birthDate = LocalDate.now();
     }
 
@@ -43,7 +56,7 @@ public class Person implements Serializable {
     }
 
     public String getFullName(){
-        return firstName + " " + lastName;
+        return lastName + " " + firstName;
     }
 
     public Long getId() {
@@ -84,6 +97,14 @@ public class Person implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public GenderType getGender() {
+        return gender;
+    }
+
+    public void setGender(GenderType gender) {
+        this.gender = gender;
     }
 
     @Override

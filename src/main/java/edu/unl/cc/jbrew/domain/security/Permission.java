@@ -1,12 +1,22 @@
 package edu.unl.cc.jbrew.domain.security;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Permission implements java.io.Serializable{
+@Entity
+public class Permission implements Serializable{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY  )
     private Long id;
 
+    @NotNull
     private String resource;   // Ej: "/admin/usuarios"
+
+    @Enumerated(EnumType.STRING)
     private ActionType action;
 
     public Permission() {

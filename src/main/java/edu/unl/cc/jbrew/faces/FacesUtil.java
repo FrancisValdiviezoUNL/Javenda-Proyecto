@@ -1,9 +1,23 @@
 package edu.unl.cc.jbrew.faces;
 
+import edu.unl.cc.jbrew.controllers.security.UserPrincipal;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 
 public class FacesUtil {
+
+    /*public static UserPrincipal getCurrentUser() {
+        return (UserPrincipal) FacesContext.getCurrentInstance()
+                .getExternalContext()
+                .getUserPrincipal();
+    }*/
+
+    /*
+    public static boolean hasPermission(String resource, String action) {
+        UserPrincipal user = getCurrentUser();
+        return user != null && user.hasPermission(resource, action);
+    }
+    */
 
     public static void addSuccessMessage(String summary, String detail) {
         addMessage(FacesMessage.SEVERITY_INFO, summary, detail);

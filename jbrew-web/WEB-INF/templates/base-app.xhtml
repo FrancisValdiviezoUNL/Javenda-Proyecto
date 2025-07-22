@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: wduck
+  Date: 30/6/25
+  Time: 07:56
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
+    <h:head>
+        <title>
+            <ui:insert name="title-view">J-Brew 1.0</ui:insert>
+        </title>
+        <link rel="icon" type="image/webp" href="../../images/icon-javenda.webp" />
+        <link rel="icon" type="image/png" href="../../images/icon-javenda.png" />
+        <link rel="shortcut icon" href="../../images/favicon.ico" />
+        <ui:insert name="head"/>
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                font-family: Arial, sans-serif;
+            }
+
+            .app-container {
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh; /* Ocupa toda la pantalla */
+            }
+
+            .container-app {
+                display: flex;
+                flex: 1; /* Esto hace que el menú + contenido crezcan para llenar el espacio */
+            }
+
+            .menuvertical-container {
+                width: 250px;
+                background-color: #fff;
+                border-right: 1px solid #ccc;
+            }
+
+            .content-container {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                padding: 2rem;
+            }
+
+            /* Footer siempre abajo */
+            .footer-container {
+                background-color: #f8f9fa;
+                border-top: 1px solid #dee2e6;
+                padding: 5px;
+                text-align: center;
+            }
+            .footer-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+        </style>
+        <ui:define name="head"/>
+    </h:head>
+    <h:body>
+           <div class="app-container">
+
+               <!-- Top Bar -->
+               <header id="header">
+                   <div class="header-container">
+                       <ui:insert name="header">
+                           <ui:include src="fragments/topbar.xhtml" />
+                       </ui:insert>
+                   </div>
+               </header>
+
+               <!-- Menú + Contenido -->
+               <div class="container-app">
+
+                   <!-- Menú Vertical Izquierda -->
+                   <div class="menuvertical-container">
+                       <ui:insert name="menuvertical">
+                           <ui:include src="fragments/nav-principal.xhtml" />
+                       </ui:insert>
+                   </div>
+
+                   <!-- Contenido Principal Derecha -->
+                   <main id="content" style="width: 100%;">
+                       <div class="content-container">
+                           <div class="centered-card">
+                               <ui:insert name="content">
+                                   <ui:debug hotkey="d"/>
+                               </ui:insert>
+                           </div>
+                       </div>
+                   </main>
+
+               </div>
+
+               <!-- Footer -->
+               <footer id="footer" style="background-color: #764c43;">
+                   <ui:insert name="footer">
+                       <ui:include src="fragments/footer.xhtml"/>
+                   </ui:insert>
+               </footer>
+
+               <!-- Loader -->
+               <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+                   <f:facet name="start">
+                       <i class="pi pi-spin pi-spinner layout-ajax-loader-icon" aria-hidden="true"/>
+                   </f:facet>
+                   <f:facet name="complete">
+                       <h:outputText value=""/>
+                   </f:facet>
+               </p:ajaxStatus>
+
+           </div>
+    </h:body>
+</f:view>
+</html>

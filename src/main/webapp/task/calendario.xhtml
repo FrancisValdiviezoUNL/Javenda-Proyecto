@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<ui:composition template="../WEB-INF/templates/base-app.xhtml">
+    <ui:define name="title-view">
+        Calendario de Tareas
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="calendarForm">
+            <h:messages globalOnly="true" layout="table" style="color:red" />
+
+            <p:schedule id="schedule"
+                        value="#{scheduleView.eventModel}"
+                        widgetVar="calendar"
+                        style="min-height: 600px;"
+                        draggable="false"
+                        resizable="false">
+
+                <p:ajax event="eventSelect"
+                        listener="#{scheduleView.onEventSelect}"
+                        update=":calendarForm:taskDialogPanel"
+                        oncomplete="PF('taskDialog').show();" />
+            </p:schedule>
+            <p:dialog id="taskDialogPanel"
+                      header="Detalle de Tarea"
+                      widgetVar="taskDialog"
+                      modal="true"
+                      closable="true"
+                      resizable="false"
+                      draggable="false"
+                      style="width: 60vw; max-width: 800px;">
+                <h:panelGrid columns="2" cellpadding="10">
+                    <h:outputText value="Nombre:" />
+                    <h:outputText value="#{scheduleView.event.title}" />
+
+                    <h:outputText value="Descripción:" />
+                    <h:outputText value="#{scheduleView.event.description}" />
+
+                    <h:outputText value="Materia:" />
+                    <h:outputText value="#{scheduleView.event.data != null ? scheduleView.event.data.materia : ''}" />
+
+                    <h:outputText value="Estado:" />
+                    <h:outputText value="#{scheduleView.event.data != null ? scheduleView.event.data.estado : ''}" />
+
+                    <h:outputText value="Hora de Inicio:" />
+                    <h:outputText value="#{scheduleView.event.startDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                    </h:outputText>
+
+                    <h:outputText value="Hora de Fin:" />
+                    <h:outputText value="#{scheduleView.event.endDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                    </h:outputText>
+                </h:panelGrid>
+            </p:dialog>
+
+
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+</html>

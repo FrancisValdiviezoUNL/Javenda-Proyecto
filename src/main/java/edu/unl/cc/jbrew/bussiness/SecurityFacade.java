@@ -60,12 +60,13 @@ public class SecurityFacade implements java.io.Serializable{
         try{
             User userFound = userRepository.find(name);
             String pwdEncrypted = EncryptorManager.encrypt(password);
+            System.out.println("---> OOOOO: " + pwdEncrypted + " " + userFound.getPassword() + " " + pwdEncrypted.equals(userFound.getPassword()));
             if (pwdEncrypted.equals(userFound.getPassword())){
                 return userFound;
             }
-            throw new CredentialInvalidException();
+            throw new CredentialInvalidException("Credenciales inválidas para el usuario: " + name);
         } catch (EntityNotFoundException e){
-            throw new CredentialInvalidException();
+            throw new CredentialInvalidException("Credenciales inválidas para el usuario: " + name);
         }
     }
 

@@ -1,5 +1,6 @@
 package edu.unl.cc.jbrew.domain.security;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -7,19 +8,28 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
 public class Role implements java.io.Serializable{
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull
     @NotEmpty
+    @Column(unique = true, nullable = false, length = 50)
     private String name;
 
-    private Set<User> users;
+    //private Set<User> users;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "ROLE_PERMISSION",
+            joinColumns = @JoinColumn(name = "ROLE_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PERMISSION_ID"))
     private Set<Permission> permissions;
 
     public Role() {
-        users = new HashSet<>();
+        //users = new HashSet<>();
         permissions = new HashSet<>();
     }
 
@@ -47,14 +57,6 @@ public class Role implements java.io.Serializable{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
     }
 
     public Set<Permission> getPermissions() {

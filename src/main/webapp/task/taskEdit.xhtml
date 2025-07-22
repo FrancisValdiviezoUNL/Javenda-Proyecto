@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<ui:composition template="../WEB-INF/templates/base-app.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{taskHome.selectedTaskId}" />
+        <f:event listener="#{taskHome.loadTask()}" type="preRenderView" />
+    </f:metadata>
+
+    <ui:define name="title-view">
+        Javenda 1.0 - #{taskHome.task.id != null ? 'Editar' : 'Crear'} usuario
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="taskForm">
+            <div class="col-12">
+                <div class="card ui-fluid" >
+                    <h5>
+                        #{taskHome.managed ? 'Editar' : 'Ćrear'} Usuario
+                    </h5>
+                    <p:messages skipDetailIfEqualsSummary="true" showDetail="true" closable="true">
+                        <p:autoUpdate/>
+                    </p:messages>
+
+                    <p:panel header="Información Personal">
+                        <h:panelGrid columns="2" cellpadding="7">
+                            <p:outputLabel for="title" value="Tema:" />
+                            <p:inputText id="title" value="#{taskHome.task.theme}" required="true"/>
+                            <p:outputLabel for="description" value="Descripcion:" />
+                            <p:inputText id="description" value="#{taskHome.task.description}" required="true"/>
+                            <p:outputLabel for="matery" value="Materia:" />
+                            <p:inputText id="matery" value="#{taskHome.task.matery}" required="true"/>
+
+                            <p:outputLabel for="Date2" value="Fecha de inicial:" />
+                            <p:datePicker id="Date2" value="#{taskHome.task.date_initial}" required="true"
+                                          title="Fecha de envio" pattern="yyyy-MM-dd"
+                                          showIcon="true" showOnFocus="false"
+                                          yearNavigator="yes" monthNavigator="yes"/>
+
+                            <p:outputLabel for="Date" value="Fecha de entrega:" />
+                            <p:datePicker id="Date" value="#{taskHome.task.date}" required="true"
+                                          title="Fecha de entrega" pattern="yyyy-MM-dd"
+                                          showIcon="true" showOnFocus="false"
+                                          yearNavigator="yes" monthNavigator="yes"/>
+
+                            <p:outputLabel for="timeonly" value="Time Only" />
+                            <p:datePicker id="timeonly" icon="pi pi-clock" value="#{taskHome.task.hours}" timeOnly="true" pattern="HH:mm" />
+
+                        </h:panelGrid>
+                    </p:panel>
+
+                    <p:commandButton value="Crear" rendered="#{!taskHome.managed}"
+                                     action="#{taskHome.create()}"
+                                     icon="pi pi-user" validateClient="true" styleClass="mt-3"
+                                     update="@form" title="Guarda un usuario nuevo"/>
+                    <p:commandButton value="Guardar" rendered="#{taskHome.managed}"
+                                     action="#{taskHome.update()}"
+                                     icon="pi pi-user" validateClient="true" styleClass="mt-3"
+                                     update="@form" title="Guarda un usuario nuevo"/>
+
+                    <p:commandButton value="Cancelar"
+                                     action="taskList?faces-redirect=true"
+                                     immediate="true"
+                                     icon="pi pi-times" styleClass="mt-3 ui-button-secondary"/>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

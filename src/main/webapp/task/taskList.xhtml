@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<ui:composition template="../WEB-INF/templates/base-app.xhtml">
+    <ui:define name="title-view">
+        Javenda 1.0 - Búsqueda de task
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="searchTaskForm">
+            <p:defaultCommand target="taksList:search"/>
+            <div class="col-12">
+                <div class="card">
+                    <H5>Administraación de task</H5>
+                    <p:growl id="messages" showDetail="true"/>
+                    <p:toolbar styleClass="mb-4">
+                        <p:toolbarGroup>
+                            <p:commandButton id="create" action="/task/taskEdit.xhtml?faces-redirect=true"
+                                             icon="pi pi-user-plus"
+                                             styleClass="ui-button-success" style="margin-right: .5rem"
+                                             value="Crear"/>
+                        </p:toolbarGroup>
+                    </p:toolbar><div class="¨card">
+                </div>
+
+                    <p:dataTable id="taksList"
+                                 value="#{taskList.task}" var="_task"
+                                 emptyMessage="No existen task"
+                                 paginator="true" rows="15"
+                                 paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <div class="products-table-header">
+                                    <span style="font-weight: bold">
+                                        Gestión de Usuarios  (#{taskList.task.size()} encontrados)
+                                    </span>
+                                <span class="filter-container ui-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <p:inputText id="name" value="#{taskList.criterio}"
+                                                     placeholder="Buscar usuario.."/>
+                                        <p:spacer width="5"/>
+                                        <p:commandButton id="search"
+                                                         icon="pi pi-search"
+                                                         styleClass="rounded-button ui-button-success"
+                                                         update="searchTaskForm"
+                                                         action="#{taskList.search()}"
+                                                         title="Buscar"/>
+                                        <p:spacer width="10"/>
+                                        <p:commandButton id="reset" process="@this"
+                                                         action="#{taskList.reset()}"
+                                                         update="taksList messages name"
+                                                         icon="pi pi-refresh" styleClass="rounded-button ui-button-danger"
+                                                         title="Limpiar"/>
+
+                                    </span>
+                            </div>
+                        </f:facet>
+                        <p:column headerText="id">
+                            <h:outputText value="#{_task.id}"/>
+                        </p:column>
+                        <p:column headerText="Tema de la task">
+                            <h:outputText value="#{_task.theme}"/>
+                        </p:column>
+                        <p:column headerText="Materia entidad propietaria">
+                            <h:outputText value="#{_task.matery}"/>
+                        </p:column>
+
+                        <p:column styleClass="action" class="md:col-2" headerText="Acción">
+                            <p:commandButton icon="pi pi-pencil"
+                                             styleClass="edit-button rounded-button ui-button-success" ajax="false"
+                                             id="_edit"
+                                             action="#{taskList.edit(_task)}"
+                                             process="@this"
+                                             title="Editar Tarea">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

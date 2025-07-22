@@ -23,13 +23,13 @@ is not actually needed. You may first need to execute `chmod +x mvnw`.
 
 ```
 ./mvnw clean package
-docker build -t Proyecto-Javenda:v1 .
+docker build -t jbrew-web:v1 .
 ```
 
 You can then run the Docker image by executing:
 
 ```
-docker run -it --rm -p 9080:9080 Proyecto-Javenda:v1
+docker run -it --rm -p 9080:9080 jbrew-web:v1
 ```
 
 Once the runtime starts, you can access the project at [http://localhost:9080/](http://localhost:9080/).

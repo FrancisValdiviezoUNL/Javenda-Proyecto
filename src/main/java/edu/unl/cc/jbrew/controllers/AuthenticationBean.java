@@ -1,6 +1,7 @@
 package edu.unl.cc.jbrew.controllers;
 
 import edu.unl.cc.jbrew.bussiness.SecurityFacade;
+import edu.unl.cc.jbrew.controllers.security.UserPrincipal;
 import edu.unl.cc.jbrew.controllers.security.UserSession;
 import edu.unl.cc.jbrew.domain.security.User;
 import edu.unl.cc.jbrew.faces.FacesUtil;
@@ -10,7 +11,6 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -47,14 +47,14 @@ public class AuthenticationBean implements java.io.Serializable{
             User user = securityFacade.authenticate(username, password);
             setHttpSession(user);
 
-            FacesUtil.addMessageAndKeep(FacesMessage.SEVERITY_INFO, "Ingreso Exitoso", "Bienvenido " + user.getPerson().getFullName() + " a la aplicación Javenda.");
+            FacesUtil.addMessageAndKeep(FacesMessage.SEVERITY_INFO, "Aviso", "Bienvenido " + user.getName() + " a la aplicación Jbrew.");
             //FacesMessage fc = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido", "Bienvenido " + user.getName() + " a la aplicación Jbrew.");
             //facesContext.addMessage(null, fc);
             //facesContext.getExternalContext().getFlash().setKeepMessages(true);
 
             System.out.println("--------------> userSession Longin: " + userSession.getUser());
             userSession.postLogin(user);
-            return "index.xhtml?faces-redirect=true";
+            return "dashboard.xhtml?faces-redirect=true";
         } catch (Exception e) {
             FacesUtil.addMessage(FacesMessage.SEVERITY_ERROR,  e.getMessage(), null);
             return null;
@@ -71,7 +71,7 @@ public class AuthenticationBean implements java.io.Serializable{
 
         ((jakarta.servlet.http.HttpServletRequest) facesContext.getExternalContext().getRequest()).logout();
         //userSession.logout();
-        return "/inicio.xhtml?faces-redirect=true";
+        return "/login.xhtml?faces-redirect=true";
     }
 
     public boolean verifyUserSession(){
@@ -85,7 +85,8 @@ public class AuthenticationBean implements java.io.Serializable{
      */
     private void setHttpSession(User user){
         FacesContext context = FacesContext.getCurrentInstance();
-        context.getExternalContext().getSessionMap().put("user", user);
+        UserPrincipal userPrincipal = new UserPrincipal(user);
+        context.getExternalContext().getSessionMap().put("user", userPrincipal);
     }
 
     public String getUsername() {
