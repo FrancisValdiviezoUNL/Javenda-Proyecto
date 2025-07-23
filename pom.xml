@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.unl.cc.jbrew</groupId>
-    <artifactId>Javenda-Proyecto</artifactId>
+    <artifactId>jbrew-web</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 

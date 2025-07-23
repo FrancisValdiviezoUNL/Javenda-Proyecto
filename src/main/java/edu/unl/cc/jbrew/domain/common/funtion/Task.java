@@ -43,7 +43,7 @@ public class Task implements Serializable {
     private LocalTime hours;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TASK_ID")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
 
@@ -162,5 +162,12 @@ public class Task implements Serializable {
 
     public void setHours(LocalTime hours) {
         this.hours = hours;
+    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

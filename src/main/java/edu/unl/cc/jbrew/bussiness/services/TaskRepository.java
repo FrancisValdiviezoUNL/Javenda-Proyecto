@@ -53,4 +53,5 @@ public class TaskRepository {
         params.put("theme", tema.toLowerCase() + "%");
         return crudGenericService.findWithNamedQuery("Task.findLikeName", params);
     }
+
 }

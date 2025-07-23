@@ -21,7 +21,7 @@
             <div class="col-12">
                 <div class="card ui-fluid" >
                     <h5>
-                        #{taskHome.managed ? 'Editar' : 'Ćrear'} Usuario
+                        #{taskHome.task != null and taskHome.managed ? 'Editar' : 'Crear'} Usuario
                     </h5>
                     <p:messages skipDetailIfEqualsSummary="true" showDetail="true" closable="true">
                         <p:autoUpdate/>
@@ -38,18 +38,23 @@
 
                             <p:outputLabel for="Date2" value="Fecha de inicial:" />
                             <p:datePicker id="Date2" value="#{taskHome.task.date_initial}" required="true"
-                                          title="Fecha de envio" pattern="yyyy-MM-dd"
+                                          title="Fecha de envio" pattern="dd-MM-yyyy"
                                           showIcon="true" showOnFocus="false"
-                                          yearNavigator="yes" monthNavigator="yes"/>
+                                          monthNavigator="true" yearNavigator="select"
+                                          showWeek="true" showLongMonthNames="true"
+                                          showButtonBar="true" />
 
                             <p:outputLabel for="Date" value="Fecha de entrega:" />
                             <p:datePicker id="Date" value="#{taskHome.task.date}" required="true"
-                                          title="Fecha de entrega" pattern="yyyy-MM-dd"
+                                          title="Fecha de entrega" pattern="dd-MM-yyyy"
                                           showIcon="true" showOnFocus="false"
-                                          yearNavigator="yes" monthNavigator="yes"/>
+                                          monthNavigator="true" yearNavigator="select"
+                                          showWeek="true" showLongMonthNames="true"
+                                          showButtonBar="true" />
 
-                            <p:outputLabel for="timeonly" value="Time Only" />
-                            <p:datePicker id="timeonly" icon="pi pi-clock" value="#{taskHome.task.hours}" timeOnly="true" pattern="HH:mm" />
+                            <p:outputLabel for="timeonly" value="Hora" />
+                            <p:datePicker id="timeonly" icon="pi pi-clock" value="#{taskHome.task.hours}" hourFormat="12" pattern="HH:mm"
+                                          showButtonBar="true" />
 
                         </h:panelGrid>
                     </p:panel>

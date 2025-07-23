@@ -41,7 +41,7 @@ public class SecurityFacadeTask implements Serializable {
     }
 
     public Task find(Long id) throws EntityNotFoundException {
-        return taskRepository.find(String.valueOf(id));
+        return taskRepository.findtaks(id);
     }
 
 
