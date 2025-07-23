@@ -27,27 +27,28 @@ public class UserHome implements java.io.Serializable{
 
     @Inject
     SecurityFacade securityFacade;
-
+    @Inject
+    private UserSession userSession;
 
     public UserHome() {
         user = new User();
     }
 
     public void loadUser() {
-        logger.info("Loading user with id: " + selectedUserId);
-        if (selectedUserId != null) {
-            try {
-                user = securityFacade.find(selectedUserId);
-                if (user.getPerson() == null) {
-                    user.setPerson(new edu.unl.cc.jbrew.domain.common.Person());
-                }
-            } catch (EntityNotFoundException e) {
-                FacesUtil.addErrorMessage("No se pudo encontrar el usuario con id: " + selectedUserId);
+        try {
+            User currentUser = userSession.getUser();
+            if (currentUser == null || currentUser.getId() == null) {
+                FacesUtil.addErrorMessage("No hay usuario autenticado correctamente.");
+                return;
             }
-        } else {
-            user = new User();
+            user = securityFacade.find(currentUser.getId());
+            if (user.getPerson() == null) {
+                user.setPerson(new edu.unl.cc.jbrew.domain.common.Person());
+            }
+            decryptPassword(user);
+        } catch (EntityNotFoundException e) {
+            FacesUtil.addErrorMessage("No se pudo encontrar el usuario actual.");
         }
-        decryptPassword(user);
     }
 
     private void decryptPassword(User user){
@@ -83,7 +84,7 @@ public class UserHome implements java.io.Serializable{
             securityFacade.update(user);
             //decryptPassword(user);
             FacesUtil.addSuccessMessageAndKeep("Usuario actualizado correctamente");
-            return "security/userList?faces-redirect=true";
+            return "../dashboard?faces-redirect=true";
         } catch (Exception e) {
             FacesUtil.addErrorMessage("Inconveniente al actualizar usuario: " + e.getMessage());
             return null;

@@ -44,9 +44,15 @@ public class SecurityFacadeTask implements Serializable {
         return taskRepository.findtaks(id);
     }
 
-
     public List<Task> findTask(String criterio) throws EntityNotFoundException {
         return taskRepository.findWithLike(criterio);
+    }
+
+    public List<Task> findTaskUser(String criterio, Long id_user) throws EntityNotFoundException {
+        return taskRepository.findWithLikeTask(criterio, id_user);
+    }
+    public List<Task> findAllByUser(Long userId) {
+        return taskRepository.findAllByUser(userId);
     }
 
 }

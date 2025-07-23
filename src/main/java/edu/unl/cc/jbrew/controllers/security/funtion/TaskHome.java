@@ -52,7 +52,7 @@ public class TaskHome implements java.io.Serializable{
 
             task = securityFacadeTask.create(task);
 
-            FacesUtil.addSuccessMessageAndKeep("Tarea creada correctamente");
+            FacesUtil.addSuccessMessageAndKeep("Tarea Creada", "Tarea creada correctamente");
             return "taskList?faces-redirect=true";
         } catch (Exception e) {
             FacesUtil.addErrorMessage("Inconveniente al crear la tarea: " + e.getMessage());

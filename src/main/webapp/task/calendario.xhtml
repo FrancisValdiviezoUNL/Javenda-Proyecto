@@ -36,27 +36,34 @@
                       draggable="false"
                       style="width: 60vw; max-width: 800px;">
                 <h:panelGrid columns="2" cellpadding="10">
-                    <h:outputText value="Nombre:" />
-                    <h:outputText value="#{scheduleView.event.title}" />
+
+                    <h:outputText value="Tema:" />
+                    <h:outputText value="#{scheduleView.event.data.theme}" />
 
                     <h:outputText value="Descripción:" />
-                    <h:outputText value="#{scheduleView.event.description}" />
+                    <h:outputText value="#{scheduleView.event.data.description}" />
 
                     <h:outputText value="Materia:" />
-                    <h:outputText value="#{scheduleView.event.data != null ? scheduleView.event.data.materia : ''}" />
+                    <h:outputText value="#{scheduleView.event.data.matery}" />
 
                     <h:outputText value="Estado:" />
-                    <h:outputText value="#{scheduleView.event.data != null ? scheduleView.event.data.estado : ''}" />
+                    <h:outputText value="#{scheduleView.event.data.statusTask}" />
 
-                    <h:outputText value="Hora de Inicio:" />
-                    <h:outputText value="#{scheduleView.event.startDate}">
-                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                    <h:outputText value="Fecha de Inicio:" />
+                    <h:outputText value="#{scheduleView.event.data.date_initial}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
                     </h:outputText>
 
-                    <h:outputText value="Hora de Fin:" />
-                    <h:outputText value="#{scheduleView.event.endDate}">
-                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                    <h:outputText value="Fecha de Fin:" />
+                    <h:outputText value="#{scheduleView.event.data.date}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
                     </h:outputText>
+
+                    <h:outputText value="Hora:" />
+                    <h:outputText value="#{scheduleView.event.data.hours}">
+                        <f:convertDateTime type="time" pattern="HH:mm" />
+                    </h:outputText>
+
                 </h:panelGrid>
             </p:dialog>
 

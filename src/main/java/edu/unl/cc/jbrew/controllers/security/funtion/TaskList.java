@@ -2,8 +2,11 @@ package edu.unl.cc.jbrew.controllers.security.funtion;
 
 import edu.unl.cc.jbrew.bussiness.SecurityFacadeTask;
 import edu.unl.cc.jbrew.controllers.security.UserList;
+import edu.unl.cc.jbrew.controllers.security.UserSession;
 import edu.unl.cc.jbrew.domain.common.funtion.Task;
+import edu.unl.cc.jbrew.domain.security.User;
 import edu.unl.cc.jbrew.exception.EntityNotFoundException;
+import edu.unl.cc.jbrew.faces.FacesUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -28,6 +31,8 @@ public class TaskList implements Serializable {
 
     @Inject
     SecurityFacadeTask securityFacadeTask;
+    @Inject
+    private UserSession userSession;
 
     public TaskList() {
         task = new ArrayList<>();
@@ -41,12 +46,31 @@ public class TaskList implements Serializable {
 
     public void search()  {
         try {
-            logger.info("****** Ingreso a buscar con: " + getCriteriaBuffer() + " ******");
-            task = securityFacadeTask.findTask(getCriteriaBuffer());
+            User currentUser = userSession.getUser();
+            if (currentUser == null || currentUser.getId() == null) {
+                FacesUtil.addErrorMessage("No hay usuario autenticado.");
+                task.clear();
+                return;
+            }
+
+            logger.info("Buscando tareas con criterio: " + getCriteriaBuffer() + " y usuario ID: " + currentUser.getId());
+            task = securityFacadeTask.findTaskUser(getCriteriaBuffer(), currentUser.getId());
+
         } catch (EntityNotFoundException e) {
             task.clear();
+            FacesUtil.addErrorMessage("No se encontraron tareas.");
         }
     }
+    /**
+public void search()  {
+    try {
+        User currentUser = userSession.getUser();
+        logger.info("****** Ingreso a buscar con: " + getCriteriaBuffer() + " ******");
+        task = securityFacadeTask.findTask(getCriteriaBuffer());
+    } catch (EntityNotFoundException e) {
+        task.clear();
+    }
+}**/
 
     public String edit(Task _selectedtaks){
         return "taskEdit?faces-redirect=true&id=" + _selectedtaks.getId();

@@ -64,11 +64,15 @@
                         <div class="card" style="text-align: center">
                             <p:graphicImage title="Perfil" url="images/configuraciones.png" style="width: 155px; align-content: center"/>
                         </div>
-                        <p:commandButton value="Editar Perfil" styleClass="rounded-button ui-button-success custom" icon="pi pi-user"
+
+                        <p:commandButton value="Editar Perfil"
+                                         styleClass="rounded-button ui-button-success custom"
+                                         ajax="false"
+                                         icon="pi pi-user"
                                          id="_edit"
-                                         action="#{userList.edit(userList)}"
+                                         action="/security/userEdit.xhtml?faces-redirect=true"
                                          process="@this"/>
-                    </p:splitterPanel>
+                        </p:splitterPanel>
                 </p:splitter>
             </div>
         </h:form>

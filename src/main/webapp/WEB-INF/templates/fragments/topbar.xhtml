@@ -44,8 +44,11 @@
                              rendered="#{authenticationBean.verifyUserSession()}"
                              styleClass="rounded-button ui-button-secondary">
                   <p:menuitem value="Pagina de Inicio" url="/index.xhtml?faces-redirect=true" icon="pi pi-home"/>
-                  <p:menuitem value="Editar perfil" icon="pi pi-save"/>
-                  <p:menuitem value="menu" icon="pi pi-save" action="v1//calendario.xhtml?faces-redirect=true"/>
+                  <p:menuitem value="Editar perfil" icon="pi pi-save"
+                              id="_edit"
+                              action="/security/userEdit.xhtml?faces-redirect=true"
+                              process="@this"
+                              ajax="false"/>
                   <p:menuitem value="Cerrar Sesion" action="#{authenticationBean.logout}" ajax="false" icon="pi pi-times"/>
 
                </p:menuButton>

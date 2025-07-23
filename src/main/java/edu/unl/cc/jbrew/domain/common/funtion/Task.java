@@ -14,7 +14,11 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = "Task.findLikeName", query = "select o from Task o where o.theme like :theme"),
         @NamedQuery(name = "Task.findById", query = "select o from Task o where o.id = :id "),
+        @NamedQuery(name = "Task.findLikeNameAndUser", query = "SELECT t FROM Task t WHERE LOWER(t.theme) LIKE :theme AND t.user.id = :userId"),
+        @NamedQuery(name = "Task.findByUser", query = "SELECT t FROM Task t WHERE t.user.id = :userID")
+
 })
+
 public class Task implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

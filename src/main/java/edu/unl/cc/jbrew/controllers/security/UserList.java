@@ -48,7 +48,6 @@ public class UserList implements java.io.Serializable{
     }
 
     public String edit(User _selected){
-        //FacesContext.getCurrentInstance().getExternalContext().getFlash().put("selected", _selected);
         return "userEdit?faces-redirect=true&id=" + _selected.getId();
     }
 

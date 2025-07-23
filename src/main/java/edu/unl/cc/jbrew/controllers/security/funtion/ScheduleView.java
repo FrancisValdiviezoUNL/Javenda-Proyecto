@@ -1,7 +1,11 @@
 package edu.unl.cc.jbrew.controllers.security.funtion;
 
+import edu.unl.cc.jbrew.controllers.security.UserSession;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
@@ -9,6 +13,10 @@ import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
+import edu.unl.cc.jbrew.bussiness.SecurityFacadeTask;
+import edu.unl.cc.jbrew.domain.security.User;
+import edu.unl.cc.jbrew.domain.common.funtion.Task;
+import java.util.List;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -18,33 +26,57 @@ import java.util.Date;
 @ViewScoped
 public class ScheduleView implements Serializable {
     private ScheduleModel eventModel;
-    private ScheduleEvent<?> event;
+    private ScheduleEvent<?> event = new DefaultScheduleEvent<>();
+
+    @Inject
+    private SecurityFacadeTask securityFacadeTask;
+
+    @Inject
+    private UserSession userSession;
 
     @PostConstruct
     public void init() {
         eventModel = new DefaultScheduleModel();
 
-        // Simulación de tarea
-        DefaultScheduleEvent<?> tarea1 = DefaultScheduleEvent.builder()
-                .title("Tarea Matemáticas")
-                .description("Resolver ejercicios de álgebra")
-                .startDate(LocalDateTime.of(2025, 7, 8, 10, 0))  // Fija la fecha y hora
-                .endDate(LocalDateTime.of(2025, 7, 8, 12, 0))
-                .data(new Tarea("Matemáticas", "Pendiente"))
-                .build();
+        User currentUser = userSession.getUser();
+        if (currentUser != null) {
+            List<Task> tareas = securityFacadeTask.findAllByUser(currentUser.getId());
+            for (Task t : tareas) {
+                // Combina LocalDate + LocalTime para crear un LocalDateTime
+                LocalDateTime start = t.getDate_initial().atTime(t.getHours());
+                LocalDateTime end = t.getDate().atTime(t.getHours());
 
-        eventModel.addEvent(tarea1);
+                ScheduleEvent<?> ev = DefaultScheduleEvent.builder()
+                        .title(t.getTheme())
+                        .startDate(end)
+                        .endDate(end)
+                        .description(t.getDescription())
+                        .data(t.getId()) // útil para edición posterior
+                        .build();
+
+                eventModel.addEvent(ev);
+            }
+        }
     }
 
     public void onEventSelect(SelectEvent<ScheduleEvent<?>> selectEvent) {
         this.event = selectEvent.getObject();
-        PrimeFaces.current().executeScript("PF('taskDialog').show()");
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Evento seleccionado", event.getTitle());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public void onDateSelect(org.primefaces.event.SelectEvent<Date> selectEvent) {
-        // Aquí se podría abrir un formulario para crear nueva tarea
+    public void onDateSelect(SelectEvent<LocalDateTime> selectEvent) {
+        LocalDateTime start = selectEvent.getObject();
+        LocalDateTime end = start.plusHours(1);
+
+        this.event = DefaultScheduleEvent.builder()
+                .startDate(start)
+                .endDate(end)
+                .title("Nuevo evento")
+                .build();
     }
 
+    // Getter/Setter
     public ScheduleModel getEventModel() {
         return eventModel;
     }
@@ -55,18 +87,5 @@ public class ScheduleView implements Serializable {
 
     public void setEvent(ScheduleEvent<?> event) {
         this.event = event;
-    }
-
-    public static class Tarea {
-        private String materia;
-        private String estado;
-
-        public Tarea(String materia, String estado) {
-            this.materia = materia;
-            this.estado = estado;
-        }
-
-        public String getMateria() { return materia; }
-        public String getEstado() { return estado; }
     }
 }

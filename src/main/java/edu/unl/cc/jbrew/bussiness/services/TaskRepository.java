@@ -47,11 +47,22 @@ public class TaskRepository {
         }
         return taskFound;
     }
-
     public List<Task> findWithLike(@NotNull String tema) throws EntityNotFoundException{
         Map<String, Object> params = new HashMap<>();
         params.put("theme", tema.toLowerCase() + "%");
         return crudGenericService.findWithNamedQuery("Task.findLikeName", params);
+    }
+
+    public List<Task> findWithLikeTask(@NotNull String tema, @NotNull Long id_user) throws EntityNotFoundException{
+        Map<String, Object> params = new HashMap<>();
+        params.put("theme", tema.toLowerCase() + "%");
+        params.put("userId", id_user);
+        return crudGenericService.findWithNamedQuery("Task.findLikeNameAndUser", params);
+    }
+    public List<Task> findAllByUser(Long userId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userID", userId);
+        return crudGenericService.findWithNamedQuery("Task.findByUser", params);
     }
 
 }
