@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+<ui:composition template="../WEB-INF/templates/base-app.xhtml">
+    <ui:define name="title-view">
+        Javenda 1.0 - Búsqueda de task
+    </ui:define>
+    <ui:define name="head">
+        <style>
+            .isTaskLate {
+                color: white ;
+                background-color: red !important;
+                border-radius: 20px !important;
+            }
+            .isTask {
+                color: white ;
+                background-color: green !important;
+                border-radius: 20px !important;
+            }
+
+        </style>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="searchTaskForm">
+            <div class="col-12">
+                <div class="card">
+                    <H5>Administraación de tareas</H5>
+                    <p:growl id="messages" showDetail="true"/>
+                    <p:toolbar styleClass="mb-4"/>
+                    <div class="card"></div>
+
+                    <p:dataTable id="taskDeleteList"
+                                 value="#{taskDeletedList.deletedTasks}" var="_task"
+                                 emptyMessage="No existen task"
+                                 paginator="true" rows="15"
+                                 paginatorPosition="bottom" style="text-align: center">
+                        <f:facet name="header">
+                            <div class="products-table-header">
+                                <span style="font-weight: bold">
+                                    Tareas Eliminadas (#{taskDeletedList.deletedTasks.size()} encontradas)
+                                </span>
+                                <span class="filter-container ui-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <p:inputText id="criterio" value="#{taskDeletedList.criterio}" placeholder="Buscar tareas..."/>
+                                    <p:spacer width="5"/>
+                                    <p:commandButton id="search" icon="pi pi-search" styleClass="rounded-button ui-button-success"
+                                                     update="@form" action="#{taskDeletedList.search()}" title="Buscar"/>
+
+                                    <p:spacer width="10"/>
+                                    <p:commandButton id="reset" process="@this" action="#{taskDeletedList.reset()}"
+                                                     update="@form messages criterio"
+                                                     icon="pi pi-refresh" styleClass="rounded-button ui-button-danger"
+                                                     title="Limpiar"/>
+                                </span>
+                            </div>
+                        </f:facet>
+
+                        <p:column headerText="Tema de la Tarea" style="text-align: center">
+                            <h:outputText value="#{_task.theme}"/>
+                        </p:column>
+                        <p:column headerText="Materia:" style="text-align: center" >
+                            <h:outputText value="#{_task.matery}" />
+                        </p:column>
+                        <p:column headerText="Descripcion:" style="text-align: center" >
+                            <h:outputText value="#{_task.description}"/>
+                        </p:column>
+                        <p:column headerText="Fecha de inicio:" style="text-align: center" >
+                            <h:outputText value="#{_task.date_initial}"/>
+                        </p:column>
+                        <p:column headerText="Fecha de entrega:" style="text-align: center" >
+                            <h:outputText value="#{_task.date}"/>
+                        </p:column>
+                        <p:column headerText="Hora:" style="text-align: center" >
+                            <h:outputText value="#{_task.hours}"/>
+                        </p:column>
+
+                        <p:column styleClass="action" class="md:col-2" headerText="Recuperar" style="text-align: center" >
+                            <p:commandButton icon="pi pi-undo"
+                                             action="#{taskDeletedList.restore(_task)}"
+                                             value="Restaurar"
+                                             update="@form"
+                                             onclick="return confirm('¿Restaurar esta tarea?')" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

@@ -11,6 +11,7 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
+    user: "999:999" # Optional, can be set based on host user
     ports:
       - ${DB_MYSQL_PORT_PUBLIC}:3306
     volumes:

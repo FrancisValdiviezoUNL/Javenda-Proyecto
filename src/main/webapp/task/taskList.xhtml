@@ -10,6 +10,21 @@
     <ui:define name="title-view">
         Javenda 1.0 - Búsqueda de task
     </ui:define>
+    <ui:define name="head">
+        <style>
+            .isTaskLate {
+                color: white ;
+                background-color: red !important;
+                border-radius: 20px !important;
+            }
+            .isTask {
+                color: white ;
+                background-color: green !important;
+                border-radius: 20px !important;
+            }
+
+        </style>
+    </ui:define>
     <ui:define name="content">
         <h:form id="searchTaskForm">
             <p:defaultCommand target="taksList:search"/>
@@ -23,6 +38,10 @@
                                              icon="pi pi-plus"
                                              styleClass="ui-button-success" style="margin-right: .5rem"
                                              value="Crear"/>
+                            <p:commandButton id="Papelera" action="/task/taskListDeleted.xhtml?faces-redirect=true"
+                                             icon="pi pi-plus"
+                                             styleClass="rounded-button ui-button-warning" style="margin-right: .5rem"
+                                             value="Papelera"/>
                         </p:toolbarGroup>
                     </p:toolbar><div class="¨card">
                 </div>
@@ -31,7 +50,7 @@
                                  value="#{taskList.task}" var="_task"
                                  emptyMessage="No existen task"
                                  paginator="true" rows="15"
-                                 paginatorPosition="bottom">
+                                 paginatorPosition="bottom" style="text-align: center">
                         <f:facet name="header">
                             <div class="products-table-header">
                                     <span style="font-weight: bold">
@@ -58,26 +77,45 @@
                                     </span>
                             </div>
                         </f:facet>
-                        <p:column headerText="Tema de la Tarea">
+                        <p:column headerText="Tema de la Tarea" style="text-align: center">
                             <h:outputText value="#{_task.theme}"/>
                         </p:column>
-                        <p:column headerText="Materia:">
-                            <h:outputText value="#{_task.matery}"/>
+                        <p:column headerText="Materia:" style="text-align: center" >
+                            <h:outputText value="#{_task.matery}" />
                         </p:column>
-                    <p:column headerText="Descripcion:">
-                        <h:outputText value="#{_task.description}"/>
-                    </p:column>
-                    <p:column headerText="Fecha de inicio:">
-                        <h:outputText value="#{_task.date_initial}"/>
-                    </p:column>
-                    <p:column headerText="Fecha de entrega:">
-                        <h:outputText value="#{_task.date}"/>
-                    </p:column>
-                    <p:column headerText="Hora:">
-                        <h:outputText value="#{_task.hours}"/>
-                    </p:column>
+                        <p:column headerText="Descripcion:" style="text-align: center" >
+                            <h:outputText value="#{_task.description}"/>
+                        </p:column>
+                        <p:column headerText="Fecha de inicio:" style="text-align: center " >
+                            <h:outputText value="#{_task.date_initial}"/>
+                        </p:column>
+                        <p:column headerText="Fecha de entrega:" style="text-align: center" >
+                            <h:outputText value="#{_task.date}"/>
+                        </p:column>
+                        <p:column headerText="Hora:" style="text-align: center" >
+                            <h:outputText value="#{_task.hours}"/>
+                        </p:column>
 
-                        <p:column styleClass="action" class="md:col-2" headerText="Editar">
+                        <p:column headerText="Tiempo restante:" style="text-align: center" >
+                            <p:commandButton styleClass="edit-button ui-button-success #{_task.isLate()  ? 'isTaskLate' : 'isTask' }" ajax="true"
+                                             value="#{_task.timeOfTask()}"
+                            />
+                        </p:column>
+
+
+                        <p:column headerText="Estado:" style="text-align: center">
+                            <p:commandButton styleClass="edit-button ui-button-success" ajax="true"
+                                             id="_status"
+                                             value="#{_task.statusTask}"
+                                             actionListener="#{taskHome.edit(_task)}"
+                                             oncomplete="PF('statusEdit').show();"
+                                             update=":statusEditForm"
+                                             process="@this"
+                                             title="Estado"
+                                             style="background-color: transparent !important; border-radius: 20px !important; color: black"/>
+                        </p:column>
+
+                        <p:column styleClass="action" class="md:col-2" headerText="Editar" style="text-align: center" >
                             <p:commandButton icon="pi pi-pencil"
                                              styleClass="edit-button rounded-button ui-button-success" ajax="false"
                                              id="_edit"
@@ -86,10 +124,59 @@
                                              title="Editar Tarea">
                             </p:commandButton>
                         </p:column>
+                        <p:column styleClass="action" class="md:col-2" headerText="Eliminar" style="text-align: center" >
+                            <!--p:commandButton icon="pi pi-pencil"
+                                             styleClass="edit-button rounded-button ui-button-success" ajax="false"
+                                             id="_eliminar"
+                                             action="#{taskList.edit(_task)}"
+                                             process="@this"
+                                             title="Eliminar Tarea">
+                            </p:commandButton>-->
+                            <p:commandButton icon="pi pi-trash"
+                                             actionListener="#{taskHome.deleteTask(_task.id)}"
+                                             update="searchTaskForm:taksList searchTaskForm:messages"
+                                             action="#{taskList.search()}"
+                                             process="@this"
+                                             onclick="return confirm('¿Está seguro que desea eliminar esta tarea?')"/>
+
+
+                        </p:column>
                     </p:dataTable>
                 </div>
             </div>
         </h:form>
+        <p:dialog id="status_edit_dialog" widgetVar="statusEdit"
+                  header="Editar Estado de Tarea"
+                  modal="true" closable="true" resizable="false" draggable="false"
+                  appendTo="@(body)" width="60vh">
+
+            <h:form id="statusEditForm" style="text-align: center">
+                <p:messages id="messages" showDetail="true" closable="true" />
+
+                <p:panelGrid columns="2" columnClasses="label,value" style="width:100%">
+
+                    <p:outputLabel for="statuTask" value="Estado:"/>
+                    <p:selectOneMenu id="statuTask" value="#{taskHome.task.statusTask}">
+                        <f:selectItems value="#{factoryListStatus.statusOptions}"
+                                       var="status"
+                                       itemValue="#{status}"
+                                       itemLabel="#{status.name() == 'PENDIENTE' ? 'Pendiente' : (status.name() == 'EN_PROCESO' ? 'En Proceso' : 'Completado')}"/>
+
+                    </p:selectOneMenu>
+
+                </p:panelGrid>
+
+                <p:commandButton value="Guardar" rendered="#{taskHome.managed}"
+                                 action="#{taskHome.update()}"
+                                 update="statusEditForm searchTaskForm:taksList"
+                                 oncomplete="PF('statusEdit').hide();"
+                                 process="@form"
+                                 icon="pi pi-check" />
+
+
+            </h:form>
+        </p:dialog>
+
     </ui:define>
 </ui:composition>
 </html>

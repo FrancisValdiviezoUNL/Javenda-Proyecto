@@ -55,6 +55,13 @@
                             <p:outputLabel for="timeonly" value="Hora" />
                             <p:datePicker id="timeonly" icon="pi pi-clock" value="#{taskHome.task.hours}" hourFormat="12" pattern="HH:mm"
                                           showButtonBar="true" />
+                            <p:outputLabel for="statuTask" value="Estado:" />
+                            <p:selectOneMenu id="statuTask" value="#{taskHome.task.statusTask}">
+                                <f:selectItems value="#{factoryListStatus.statusOptions}"
+                                               var="status"
+                                               itemValue="#{status}"
+                                               itemLabel="#{status == 'PENDIENTE' ? 'Pendiente' : (status == 'EN_PROCESO' ? 'En Proceso' : 'Completado')}" />
+                            </p:selectOneMenu>
 
                         </h:panelGrid>
                     </p:panel>

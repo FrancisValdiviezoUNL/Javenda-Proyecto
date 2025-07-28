@@ -50,7 +50,9 @@
                                 <p:datePicker id="birthDate" value="#{userHome.user.person.birthDate}" required="true"
                                               title="Fecha de nacimiento" pattern="yyyy-MM-dd"
                                               showIcon="true" showOnFocus="false"
-                                              yearNavigator="yes" monthNavigator="yes"/>
+                                              monthNavigator="true" yearNavigator="select"
+                                              showWeek="true" showLongMonthNames="true"
+                                              showButtonBar="true" />
 
                                 <p:outputLabel for="email" value="Email:" />
                                 <p:inputText id="email" value="#{userHome.user.person.email}"

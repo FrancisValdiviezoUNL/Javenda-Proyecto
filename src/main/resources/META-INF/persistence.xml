@@ -7,14 +7,6 @@
         <jta-data-source>jdbc/javendaDS</jta-data-source>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
-            <!-- CONFIGURACION DE CONEXION A LA BD -->
-            <!-- SOLO FUNCIONA CON transaction-type="RESOURCE_LOCAL" -->
-            <!--
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/jbrew"/>
-            <property name="jakarta.persistence.jdbc.user" value="jbrewuser"/>
-            <property name="jakarta.persistence.jdbc.password" value="jbrewUser2525"/>
-            -->
-            <!-- FIN CONFIGURACION DE CONEXION A LA BD -->
 
             <!-- 1. Configuración de generación / actualización de tablas (esquema de BD) -->
             <!-- Configuración de Jakarta persistence puede ser: none, create, drop-and-create, drop -->

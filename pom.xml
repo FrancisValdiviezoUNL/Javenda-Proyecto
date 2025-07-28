@@ -58,7 +58,7 @@
     </dependencies>
 
     <build>
-        <finalName>jbrew-web</finalName>
+        <finalName>javenda-web</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
