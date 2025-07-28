@@ -7,10 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.*;
 
 @Entity
 @NamedQueries({
@@ -122,15 +119,20 @@ public class Task implements Serializable {
             throw new IllegalArgumentException("El nombre de la materia no debe superar los 25 caracteres");
         }
     }
-    public Boolean isLate (){
+    public Boolean isLate() {
+        if (this.date == null || this.hours == null) {
+            return false;
+        }
+
         LocalDateTime dateTask = LocalDateTime.of(this.date, this.hours);
-        return dateTask.isBefore(LocalDateTime.now());
+        LocalDateTime dateNow = ZonedDateTime.now(ZoneId.of("America/Guayaquil")).toLocalDateTime();
+        return dateTask.isBefore(dateNow);
     }
     public String timeOfTask() {
         if (date == null || hours == null) return "Fecha u hora no definida";
 
         LocalDateTime dateTask = LocalDateTime.of(this.date, this.hours);
-        LocalDateTime dateNow = LocalDateTime.now();
+        LocalDateTime dateNow = ZonedDateTime.now(ZoneId.of("America/Guayaquil")).toLocalDateTime();
 
         if (dateNow.isAfter(dateTask)) {
             Duration late = Duration.between(dateTask, dateNow);

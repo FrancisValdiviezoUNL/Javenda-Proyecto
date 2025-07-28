@@ -1,6 +1,7 @@
 package edu.unl.cc.javenda.controllers.security.funtion;
 
 import edu.unl.cc.javenda.controllers.security.UserSession;
+import edu.unl.cc.javenda.exception.EntityNotFoundException;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -32,6 +33,11 @@ public class ScheduleView implements Serializable {
     @Inject
     private UserSession userSession;
 
+    private Task selectedTask;
+
+    @Inject
+    private TaskHome taskHome;
+
     @PostConstruct
     public void init() {
         eventModel = new DefaultScheduleModel();
@@ -40,16 +46,17 @@ public class ScheduleView implements Serializable {
         if (currentUser != null) {
             List<Task> tareas = securityFacadeTask.findAllByUser(currentUser.getId());
             for (Task t : tareas) {
-                // Combina LocalDate + LocalTime para crear un LocalDateTime
-                LocalDateTime start = t.getDate_initial().atTime(t.getHours());
                 LocalDateTime end = t.getDate().atTime(t.getHours());
+
+                boolean isLate = t.isLate();
 
                 ScheduleEvent<?> ev = DefaultScheduleEvent.builder()
                         .title(t.getTheme())
                         .startDate(end)
                         .endDate(end)
                         .description(t.getDescription())
-                        .data(t.getId()) // útil para edición posterior
+                        .styleClass(isLate ? "event-late" : "event-normal")
+                        .data(t.getId())
                         .build();
 
                 eventModel.addEvent(ev);
@@ -59,10 +66,19 @@ public class ScheduleView implements Serializable {
 
     public void onEventSelect(SelectEvent<ScheduleEvent<?>> selectEvent) {
         this.event = selectEvent.getObject();
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Evento seleccionado", event.getTitle());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
 
+        Long taskId = (Long) event.getData();
+        if (taskId != null) {
+            try {
+                Task selectedTask = securityFacadeTask.find(taskId);
+                taskHome.setTask(selectedTask);
+                taskHome.setRedirectionUrl("calendar");
+            } catch (EntityNotFoundException e) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo cargar la tarea."));
+            }
+        }
+    }
     public void onDateSelect(SelectEvent<LocalDateTime> selectEvent) {
         LocalDateTime start = selectEvent.getObject();
         LocalDateTime end = start.plusHours(1);
@@ -85,5 +101,13 @@ public class ScheduleView implements Serializable {
 
     public void setEvent(ScheduleEvent<?> event) {
         this.event = event;
+    }
+
+    public Task getSelectedTask() {
+        return selectedTask;
+    }
+
+    public void setSelectedTask(Task selectedTask) {
+        this.selectedTask = selectedTask;
     }
 }

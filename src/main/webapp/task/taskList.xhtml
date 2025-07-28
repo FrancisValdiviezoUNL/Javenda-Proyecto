@@ -13,14 +13,15 @@
     <ui:define name="head">
         <style>
             .isTaskLate {
-                color: white ;
                 background-color: red !important;
-                border-radius: 20px !important;
+                color: white !important;
+                border-radius: 20px;
             }
+
             .isTask {
-                color: white ;
                 background-color: green !important;
-                border-radius: 20px !important;
+                color: white !important;
+                border-radius: 20px;
             }
 
         </style>
@@ -96,10 +97,12 @@
                             <h:outputText value="#{_task.hours}"/>
                         </p:column>
 
-                        <p:column headerText="Tiempo restante:" style="text-align: center" >
-                            <p:commandButton styleClass="edit-button ui-button-success #{_task.isLate()  ? 'isTaskLate' : 'isTask' }" ajax="true"
-                                             value="#{_task.timeOfTask()}"
-                            />
+                        <p:column headerText="Tiempo restante:" style="text-align: center">
+                            <p:commandButton
+                                    value="#{_task.timeOfTask()}"
+                                    disabled="true"
+                                    styleClass="edit-button ui-button-success #{_task.isLate() ? 'isTaskLate' : 'isTask'}"
+                                    style="pointer-events: none;" />
                         </p:column>
 
 

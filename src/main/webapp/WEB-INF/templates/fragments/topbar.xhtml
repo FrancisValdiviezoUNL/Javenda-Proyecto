@@ -15,53 +15,144 @@
          top: 110px !important;
       }
    }
-   .panel-header {
-      background-color: #764c43;
+   .panel-green > .ui-panel-titlebar {
+      background-color: #28a745 !important;
+      color: white !important;
+      border-radius: 6px 6px 0 0;
+   }
+
+   .panel-yellow > .ui-panel-titlebar {
+      background-color: #ffc107 !important;
+      color: black !important;
+      border-radius: 6px 6px 0 0;
+   }
+
+
+   .panel-red > .ui-panel-titlebar {
+      background-color: #dc3545 !important;
+      color: white !important;
+      border-radius: 6px 6px 0 0;
    }
 </style>
 
 <ui:composition>
+<h:form id="topbarForm">
+   <div style="background: url('../../../images/fondo-oscuro1.jpg') no-repeat center center/cover">
+      <p:growl id="messages"/>
 
-      <h:form >
-         <div style="background: url('../../../images/fondo-oscuro1.jpg') no-repeat center center/cover">
-         <p:growl id="messages"/>
+      <p:menubar hideDelay="1000" style="background: url('../../../images/fondo-oscuro1.jpg') no-repeat center center/cover">
+         <f:facet name="start">
+            <p:graphicImage url="../../images/logo-javenda.webp" style="width: 150px"/>
+         </f:facet>
 
-         <p:menubar hideDelay="1000"  style="background: url('../../../images/fondo-oscuro1.jpg') no-repeat center center/cover">
-            <f:facet name="start">
-               <p:graphicImage url="../../images/logo-javenda.webp" style="width: 150px"/>
-            </f:facet>
+         <f:facet name="end">
+            <!-- Menú usuario -->
+            <p:menuButton value="#{userSession.user.name}" icon="pi pi-user" iconPos="right"
+                          rendered="#{authenticationBean.verifyUserSession()}"
+                          styleClass="rounded-button ui-button-secondary" style="margin-left: 10px">
+               <p:menuitem value="Página de Inicio" url="/index.xhtml?faces-redirect=true" icon="pi pi-home"/>
+               <p:menuitem value="Editar perfil" icon="pi pi-save"
+                           action="/security/userEdit.xhtml?faces-redirect=true"
+                           ajax="false"/>
+               <p:menuitem value="Cerrar Sesión" action="#{authenticationBean.logout}" ajax="false" icon="pi pi-times"/>
+            </p:menuButton>
 
+            <!-- Botón Dashboard -->
+            <p:commandButton icon="pi pi-home"
+                             styleClass="rounded-button ui-button-warning ui-button-outlined"
+                             action="/dashboard.xhtml?faces-redirect=true"
+                             immediate="true"
+                             style="margin-left:10px"/>
 
-            <f:facet name="end">
+            <!-- Botón campana -->
+            <p:commandButton icon="pi pi-bell"
+                             id="btnNotify"
+                             styleClass="rounded-button ui-button-warning ui-button-outlined"
+                             onclick="PF('notifySidebar').show(); return false;"
+                             title="Notificaciones"/>
+         </f:facet>
+      </p:menubar>
+   </div>
 
-               <p:commandButton value="Login"
-                                rendered="#{!facesContext.externalContext.getSessionMap().containsKey('user')}"
-                                action="/login.xhtml?faces-redirect=true"
-                                styleClass="rounded-button"/>
+   <!-- Sidebar fuera del menú -->
+   <p:sidebar widgetVar="notifySidebar" position="right"
+              style="width: 400px"
+              baseZIndex="10000" blockScroll="true">
+      <h3 style="margin-bottom: 10px">Notificaciones</h3>
+      <div style="max-height: 80vh; overflow-y: auto; padding-right: 10px">
+         <p:panel header="Pendientes Hoy (#{dashboardNotification.tasksPendingToday.size()})"
+                  styleClass="panel-green">
+            <p:dataTable id="taksListPending"
+                         value="#{dashboardNotification.tasksPendingToday}" var="t"
+                         emptyMessage="No existen tareas"
+                         paginator="false"
+                         style="text-align: center">
+               <p:column headerText="Tema" style="text-align: center">
+                  <h:outputText value="#{t.theme}"/>
+               </p:column>
+               <p:column headerText="Materia" style="text-align: center">
+                  <h:outputText value="#{t.matery}"/>
+               </p:column>
+               <p:column headerText="Fecha" style="text-align: center">
+                  <h:outputText value="#{t.date}"/>
+               </p:column>
+               <p:column headerText="Hora" style="text-align: center">
+                  <h:outputText value="#{t.hours}"/>
+               </p:column>
+            </p:dataTable>
+         </p:panel>
 
+         <p:spacer height="10"/>
 
-               <p:menuButton value="#{userSession.user.name}" icon="pi pi-user" iconPos="right"
-                             rendered="#{authenticationBean.verifyUserSession()}"
-                             styleClass="rounded-button ui-button-secondary">
-                  <p:menuitem value="Pagina de Inicio" url="/index.xhtml?faces-redirect=true" icon="pi pi-home"/>
-                  <p:menuitem value="Editar perfil" icon="pi pi-save"
-                              id="_edit"
-                              action="/security/userEdit.xhtml?faces-redirect=true"
-                              process="@this"
-                              ajax="false"/>
-                  <p:menuitem value="Cerrar Sesion" action="#{authenticationBean.logout}" ajax="false" icon="pi pi-times"/>
+         <p:panel header="En Proceso (#{dashboardNotification.tasksInProcess.size()})"
+                  styleClass="panel-yellow">
+            <p:dataTable id="taksListInProcess"
+                         value="#{dashboardNotification.tasksInProcess}" var="t"
+                         emptyMessage="No existen tareas"
+                         paginator="false"
+                         style="text-align: center">
+               <p:column headerText="Tema" style="text-align: center">
+                  <h:outputText value="#{t.theme}"/>
+               </p:column>
+               <p:column headerText="Materia" style="text-align: center">
+                  <h:outputText value="#{t.matery}"/>
+               </p:column>
+               <p:column headerText="Fecha" style="text-align: center">
+                  <h:outputText value="#{t.date}"/>
+               </p:column>
+               <p:column headerText="Hora" style="text-align: center">
+                  <h:outputText value="#{t.hours}"/>
+               </p:column>
+            </p:dataTable>
+         </p:panel>
 
-               </p:menuButton>
+         <p:spacer height="10"/>
 
-               <p:commandButton icon="pi pi-home"
-                                styleClass="rounded-button ui-button-warning ui-button-outlined"
-                                action="/dashboard.xhtml?faces-redirect=true"
-                                immediate="true"
-                                style="margin-left:20px"/>
-            </f:facet>
-         </p:menubar>
+         <p:panel header="Atrasadas (#{dashboardNotification.tasksLate.size()})"
+                  styleClass="panel-red">
+            <p:dataTable id="taksListLate"
+                         value="#{dashboardNotification.tasksLate}" var="t"
+                         emptyMessage="No existen tareas"
+                         paginator="false"
+                         style="text-align: center">
+               <p:column headerText="Tema" style="text-align: center">
+                  <h:outputText value="#{t.theme}"/>
+               </p:column>
+               <p:column headerText="Materia" style="text-align: center">
+                  <h:outputText value="#{t.matery}"/>
+               </p:column>
+               <p:column headerText="Fecha" style="text-align: center">
+                  <h:outputText value="#{t.date}"/>
+               </p:column>
+               <p:column headerText="Hora" style="text-align: center">
+                  <h:outputText value="#{t.hours}"/>
+               </p:column>
+            </p:dataTable>
+         </p:panel>
       </div>
-      </h:form>
+   </p:sidebar>
+</h:form>
+
 </ui:composition>
 
 </html>

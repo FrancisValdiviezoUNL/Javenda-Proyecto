@@ -11,6 +11,21 @@
         Calendario de Tareas
     </ui:define>
 
+    <ui:define name="head">
+        <style>
+            .event-late {
+                background-color: #e53935 !important; /* rojo fuerte */
+                border: 1px solid #b71c1c !important;
+                color: white !important;
+            }
+
+            .event-normal {
+                background-color: #43a047 !important; /* verde */
+                color: white !important;
+            }
+        </style>
+    </ui:define>
+
     <ui:define name="content">
         <h:form id="calendarForm">
             <h:messages globalOnly="true" layout="table" style="color:red" />
@@ -27,50 +42,65 @@
                         update=":calendarForm:taskDialogPanel"
                         oncomplete="PF('taskDialog').show();" />
             </p:schedule>
+
+            <!-- CORRECTO: ID del diálogo es "taskDialogPanel" -->
             <p:dialog id="taskDialogPanel"
-                      header="Detalle de Tarea"
                       widgetVar="taskDialog"
                       modal="true"
-                      closable="true"
+                      header="Editar Tarea"
                       resizable="false"
-                      draggable="false"
-                      style="width: 60vw; max-width: 800px;">
-                <h:panelGrid columns="2" cellpadding="10">
+                      width="600px"
+                      styleClass="shadow-8">
 
-                    <h:outputText value="Tema:" />
-                    <h:outputText value="#{scheduleView.event.data.theme}" />
+                <h:form id="formEditTask">
+                    <p:messages id="taskMessages" showDetail="true" closable="true" />
 
-                    <h:outputText value="Descripción:" />
-                    <h:outputText value="#{scheduleView.event.data.description}" />
+                    <fieldset style="border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin-bottom: 15px">
+                        <legend style="font-weight: bold; font-size: 16px; color: #3f51b5;">Detalles de la Tarea</legend>
 
-                    <h:outputText value="Materia:" />
-                    <h:outputText value="#{scheduleView.event.data.matery}" />
+                        <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" styleClass="ui-fluid" cellpadding="6">
 
-                    <h:outputText value="Estado:" />
-                    <h:outputText value="#{scheduleView.event.data.statusTask}" />
+                            <h:outputLabel value="Tema:" styleClass="font-semibold"/>
+                            <h:outputText value="#{taskHome.task.theme}" styleClass="text-gray-800"/>
 
-                    <h:outputText value="Fecha de Inicio:" />
-                    <h:outputText value="#{scheduleView.event.data.date_initial}">
-                        <f:convertDateTime pattern="dd/MM/yyyy" />
-                    </h:outputText>
+                            <h:outputLabel value="Descripción:" styleClass="font-semibold"/>
+                            <h:outputText value="#{taskHome.task.description}" styleClass="text-gray-800"/>
 
-                    <h:outputText value="Fecha de Fin:" />
-                    <h:outputText value="#{scheduleView.event.data.date}">
-                        <f:convertDateTime pattern="dd/MM/yyyy" />
-                    </h:outputText>
+                            <h:outputLabel value="Materia:" styleClass="font-semibold"/>
+                            <h:outputText value="#{taskHome.task.matery}" styleClass="text-gray-800"/>
 
-                    <h:outputText value="Hora:" />
-                    <h:outputText value="#{scheduleView.event.data.hours}">
-                        <f:convertDateTime type="time" pattern="HH:mm" />
-                    </h:outputText>
+                            <h:outputLabel value="Fecha de Entrega:" styleClass="font-semibold"/>
+                            <h:outputText value="#{taskHome.task.date}" styleClass="text-gray-800"/>
 
-                </h:panelGrid>
+                            <h:outputLabel value="Hora:" styleClass="font-semibold"/>
+                            <h:outputText value="#{taskHome.task.hours}" styleClass="text-gray-800"/>
+
+                            <h:outputLabel value="Tiempo Restante:" styleClass="font-semibold"/>
+                            <h:outputText value="#{taskHome.task.timeOfTask()}" styleClass="text-gray-800"/>
+
+                            <h:outputLabel value="Estado:" styleClass="font-semibold"/>
+                            <p:selectOneMenu value="#{taskHome.task.statusTask}" styleClass="w-full">
+                                <f:selectItems value="#{factoryListStatus.statusOptions}"
+                                               var="status"
+                                               itemValue="#{status}"
+                                               itemLabel="#{status.name() == 'PENDIENTE' ? 'Pendiente' : (status.name() == 'EN_PROCESO' ? 'En Proceso' : 'Completado')}"/>
+                            </p:selectOneMenu>
+
+                        </p:panelGrid>
+                    </fieldset>
+
+                    <div style="text-align: right;">
+                        <p:commandButton value="Guardar"
+                                         icon="pi pi-save"
+                                         action="#{taskHome.update}"
+                                         update=":calendarForm:schedule"
+                                         oncomplete="PF('taskDialog').hide();"
+                                         styleClass="ui-button-success"
+                                         process="@form" />
+                    </div>
+                </h:form>
             </p:dialog>
-
-
-
         </h:form>
-
     </ui:define>
 </ui:composition>
 </html>

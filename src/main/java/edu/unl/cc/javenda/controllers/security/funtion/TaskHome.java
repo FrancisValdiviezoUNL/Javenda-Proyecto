@@ -28,6 +28,8 @@ public class TaskHome implements java.io.Serializable{
 
     private Task task;
 
+    private String redirectionUrl;
+
     @Inject
     SecurityFacadeTask securityFacadeTask;
     @Inject
@@ -103,7 +105,11 @@ public class TaskHome implements java.io.Serializable{
 
             securityFacadeTask.update(task);
             FacesUtil.addSuccessMessageAndKeep("Tarea actualizada correctamente");
-            return "taskList?faces-redirect=true";
+            if ("calendar".equals(redirectionUrl)) {
+                return null;
+            } else {
+                return "taskList?faces-redirect=true";
+            }
 
         } catch (Exception e) {
             FacesUtil.addErrorMessage("Inconveniente al actualizar la tarea: " + e.getMessage());
@@ -154,5 +160,13 @@ public class TaskHome implements java.io.Serializable{
     public void setTask(Task task) {
 
         this.task = task;
+    }
+
+    public String getRedirectionUrl() {
+        return redirectionUrl;
+    }
+
+    public void setRedirectionUrl(String redirectionUrl) {
+        this.redirectionUrl = redirectionUrl;
     }
 }

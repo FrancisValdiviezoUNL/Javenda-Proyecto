@@ -11,6 +11,7 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
+      TZ: America/Guayaquil
     user: "999:999" # Optional, can be set based on host user
     ports:
       - ${DB_MYSQL_PORT_PUBLIC}:3306
@@ -46,6 +47,7 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
+      - TZ:America/Guayaquil
     ports:
       - "9080:9080"
       - "9443:9443"

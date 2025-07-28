@@ -56,4 +56,16 @@ public class SecurityFacadeTask implements Serializable {
     public List<Task> findDeletedTasksByUserWithLike(String criterio, Long userId) {
         return taskRepository.findDeletedByUserWithLike(criterio, userId);
     }
+
+    public List<Task> findPendingTasksToday(Long userId) {
+        return taskRepository.findPendingTasksToday(userId);
+    }
+
+    public List<Task> findTasksInProcess(Long userId) {
+        return taskRepository.findInProcessTasks(userId);
+    }
+
+    public List<Task> findLateTasks(Long userId) {
+        return taskRepository.findLateTasks(userId);
+    }
 }

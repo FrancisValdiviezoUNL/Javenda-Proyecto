@@ -9,6 +9,9 @@ import jakarta.ejb.TransactionAttributeType;
 import jakarta.inject.Inject;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +93,42 @@ public class TaskRepository {
                         "criterio", "%" + criterio.toLowerCase() + "%"
                 )
         );
+    }
+    public List<Task> findPendingTasksToday(Long userId) {
+        return crudGenericService.findWithQuery(
+                "SELECT t FROM Task t WHERE " +
+                        "t.statusTask = edu.unl.cc.javenda.domain.common.funtion.StatusTask.PENDIENTE " +
+                        "AND t.statusTaskBD = edu.unl.cc.javenda.domain.common.funtion.StatusTaskBD.ACTIVE " +
+                        "AND t.user.id = :userId AND t.date = CURRENT_DATE",
+                Map.of("userId", userId)
+        );
+    }
+
+    public List<Task> findInProcessTasks(Long userId) {
+        return crudGenericService.findWithQuery(
+                "SELECT t FROM Task t WHERE " +
+                        "t.statusTask = edu.unl.cc.javenda.domain.common.funtion.StatusTask.EN_PROCESO " +
+                        "AND t.statusTaskBD = edu.unl.cc.javenda.domain.common.funtion.StatusTaskBD.ACTIVE " +
+                        "AND t.user.id = :userId",
+                Map.of("userId", userId)
+        );
+    }
+
+    public List<Task> findLateTasks(Long userId) {
+        List<Task> all = crudGenericService.findWithQuery(
+                "SELECT t FROM Task t WHERE t.statusTaskBD = :status AND t.user.id = :userId",
+                Map.of("status", StatusTaskBD.ACTIVE, "userId", userId)
+        );
+
+        LocalDateTime now = ZonedDateTime.now(ZoneId.of("America/Guayaquil")).toLocalDateTime();
+
+        return all.stream()
+                .filter(t -> {
+                    if (t.getDate() == null || t.getHours() == null) return false;
+                    LocalDateTime deadline = LocalDateTime.of(t.getDate(), t.getHours());
+                    return deadline.isBefore(now);
+                })
+                .toList();
     }
 
 }
