@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 @ViewScoped
 public class TaskHome implements java.io.Serializable{
 
-    private static Logger logger = Logger.getLogger(TaskHome.class.getName());
+    //private static Logger logger = Logger.getLogger(TaskHome.class.getName());
 
     @Serial
     private static final long serialVersionUID = 1L;

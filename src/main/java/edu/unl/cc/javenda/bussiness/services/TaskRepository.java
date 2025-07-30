@@ -1,5 +1,6 @@
 package edu.unl.cc.javenda.bussiness.services;
 
+import edu.unl.cc.javenda.domain.common.funtion.StatusTask;
 import edu.unl.cc.javenda.domain.common.funtion.StatusTaskBD;
 import edu.unl.cc.javenda.domain.common.funtion.Task;
 import edu.unl.cc.javenda.exception.EntityNotFoundException;
@@ -59,19 +60,52 @@ public class TaskRepository {
 
     public List<Task> findWithLikeTask(String criterio, Long userId) {
         return crudGenericService.findWithQuery(
-                "SELECT t FROM Task t WHERE t.statusTaskBD = :status AND t.user.id = :userId AND LOWER(t.theme) LIKE :criterio",
+                "SELECT t FROM Task t WHERE t.statusTaskBD = :status AND t.statusTask NOT IN (:statustask)  AND t.user.id = :userId AND LOWER(t.theme) LIKE :criterio",
                 Map.of(
                         "status", StatusTaskBD.ACTIVE,
+                        "statustask", StatusTask.COMPLETADO,
                         "userId", userId,
                         "criterio", "%" + criterio.toLowerCase() + "%"
                 )
         );
     }
-    public List<Task> findAllByUser(Long userId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("userID", userId);
-        return crudGenericService.findWithNamedQuery("Task.findByUser", params);
+
+
+    public List<Task> findWithCompleteTask(String criterio, Long userId) {
+        return crudGenericService.findWithQuery(
+                "SELECT t FROM Task t WHERE t.statusTaskBD = :status AND t.statusTask = :statustask  AND t.user.id = :userId AND LOWER(t.theme) LIKE :criterio",
+                Map.of(
+                        "status", StatusTaskBD.ACTIVE,
+                        "statustask", StatusTask.COMPLETADO,
+                        "userId", userId,
+                        "criterio", "%" + criterio.toLowerCase() + "%"
+
+                )
+        );
     }
+
+    public List<Task> findByUserCompleteTask(Long userId) {
+        return crudGenericService.findWithQuery(
+                "SELECT t FROM Task t WHERE t.statusTaskBD = :status AND t.statusTask = :statustask  AND t.user.id = :userId ",
+                Map.of(
+                        "status", StatusTaskBD.ACTIVE,
+                        "statustask", StatusTask.COMPLETADO,
+                        "userId", userId
+                        )
+        );
+    }
+
+    public List<Task> findAllByUser ( Long userId) {
+        return crudGenericService.findWithQuery(
+                "SELECT t FROM Task t WHERE t.statusTaskBD = :status AND t.statusTask NOT IN (:statustask)  AND t.user.id = :userId ",
+                Map.of(
+                        "status", StatusTaskBD.ACTIVE,
+                        "statustask", StatusTask.COMPLETADO,
+                        "userId", userId
+                )
+        );
+    }
+
     public void deleteLogical(String namedQuery, Map<String, Object> parameters) {
         crudGenericService.updateOrDeleteWithNamedQuery(namedQuery, parameters);
     }
@@ -84,6 +118,7 @@ public class TaskRepository {
                 )
         );
     }
+
     public List<Task> findDeletedByUserWithLike(String criterio, Long userId) {
         return crudGenericService.findWithQuery(
                 "SELECT t FROM Task t WHERE t.statusTaskBD = :status AND t.user.id = :userId AND LOWER(t.theme) LIKE :criterio",
@@ -116,10 +151,11 @@ public class TaskRepository {
 
     public List<Task> findLateTasks(Long userId) {
         List<Task> all = crudGenericService.findWithQuery(
-                "SELECT t FROM Task t WHERE t.statusTaskBD = :status AND t.user.id = :userId",
-                Map.of("status", StatusTaskBD.ACTIVE, "userId", userId)
+                "SELECT t FROM Task t WHERE t.statusTaskBD = :status AND t.statusTask NOT IN (:statustask) AND t.user.id = :userId",
+                Map.of("status", StatusTaskBD.ACTIVE,
+                        "statustask", StatusTask.COMPLETADO,
+                        "userId", userId)
         );
-
         LocalDateTime now = ZonedDateTime.now(ZoneId.of("America/Guayaquil")).toLocalDateTime();
 
         return all.stream()

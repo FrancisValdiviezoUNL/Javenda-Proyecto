@@ -40,7 +40,16 @@ public class SecurityFacadeTask implements Serializable {
     public List<Task> findTaskUser(String criterio, Long id_user) throws EntityNotFoundException {
         return taskRepository.findWithLikeTask(criterio, id_user);
     }
-    public List<Task> findAllByUser(Long userId) {
+
+    public List<Task> findTaskCompleteUser(String criterio, Long id_user) throws EntityNotFoundException {
+        return taskRepository.findWithCompleteTask(criterio, id_user);
+    }
+
+    public List<Task> findTaskCompleteByUser( Long id_user) {
+        return taskRepository.findByUserCompleteTask( id_user);
+    }
+
+      public List<Task> findAllByUser(Long userId) {
         return taskRepository.findAllByUser(userId);
     }
 
@@ -50,6 +59,7 @@ public class SecurityFacadeTask implements Serializable {
         params.put("status", StatusTaskBD.DELETE);
         taskRepository.deleteLogical("Task.statusDelete", params);
     }
+
     public List<Task> findDeletedTasksByUser(Long userId) {
         return taskRepository.findDeletedByUser(userId);
     }

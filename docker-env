@@ -1,9 +1,8 @@
 ## VARIABLES DE ENTORNO PARA MYSQL
 MYSQL_VERSION=9.3.0
 DB_MYSQL_PORT_PUBLIC=3306
-LOCAL_MYSQL_DATA_DIR_BD=C:\opt\docker-mysqldata\javenda2
+LOCAL_MYSQL_DATA_DIR_BD=/home/feder/docker/docker-mysqldata/proyectojavenda-edu
 MYSQL_ROOT_PASSWORD=adminer2526
-
 
 ## VARIABLES DE ENTORNO COMUNES
 DB_NAME=javenda
@@ -12,6 +11,5 @@ DB_PASSWORD=javendaUser2525
 #PARA CONTENEDORES
 DB_SERVER_NAME=javenda-mysql-db
 DB_PORT_NUMBER=3306
-
 
 DRIVER_JDBC_DIR=target/lib/*.jar
